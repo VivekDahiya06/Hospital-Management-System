@@ -52,13 +52,13 @@ Ensure you have the following installed on your system:
 
 4. **Run the Backend Server:**
    ```bash
-   npm start
+   npm run dev
    ```
 
 5. **Run the Frontend Server:**
    ```bash
    cd frontend
-   npm start
+   npm run dev
    ```
 
 6. **Access the Application:**
