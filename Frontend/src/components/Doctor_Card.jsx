@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { AppContext } from '../Store/Context';
-import BackdropModal from './BackdropModal';
+// import BackdropModal from './BackdropModal';
 
 const Doctor_Card = ({ doctor }) => {
 
