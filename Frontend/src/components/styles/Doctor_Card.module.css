@@ -1,0 +1,79 @@
+.Container{
+    font-size: 1.2rem;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2em;
+    padding: 1.2em;
+    border: 2px solid black;
+    border-radius: 12px;
+    max-width: 25em;
+}
+
+.main{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: left;
+    gap: 1em;
+    span{
+        font-weight: bolder;
+    }
+}
+
+.image{
+    width: 50%;
+    height: 100%;
+    padding: 0 1.5em;
+}
+
+.buttons{
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1em;
+}
+
+.mobileButtons{
+    display: none;
+}
+
+
+@media screen and (width<=520px){
+    .Container{
+        width: 80%;
+        padding: 1em;
+    }
+    .info{
+        width: 100%;
+    }
+    .image{
+        display: none;
+    }
+    .buttons{
+        display: none;
+    }
+    .mobileButtons{
+        display: flex;
+        gap: 2.5em;
+    }
+}
+
+@media screen and (width<=380px){
+    .Container{
+        padding: 0.6em;
+    }
+
+    .mobileButtons{
+        gap: 1.5em;
+    }
+}

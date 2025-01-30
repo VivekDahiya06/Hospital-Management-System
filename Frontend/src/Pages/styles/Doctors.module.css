@@ -1,0 +1,126 @@
+:root {
+    --color-one: #0c306f;
+    --color-two: #1792d2;
+    --color-three: #2a2a2a;
+    --color-four: #3c3c3c;
+}
+
+
+.mainContainer {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    padding: 2em;
+}
+
+
+.Container {
+    width: 80%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 2em;
+    margin-bottom: 2em;
+    padding: 0.8em;
+}
+
+
+.form {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2em;
+    width: 100%;
+    font-size: .8rem;
+}
+
+.formContainer {
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.infoContainer {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    gap: 1.1em;
+    width: 70%;
+}
+
+
+.input,
+.radioContainer {
+    width: 80%;
+}
+
+.radioContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.85em;
+}
+
+.imageUpload {
+    width: 30%;
+    height: 100%;
+    min-width: 100px;
+}
+
+.imageUploadContainer {
+    width: 100%;
+    height: 100%;
+    color: var(--color-two);
+}
+
+.imageUploadLabel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.8em;
+    cursor: pointer;
+}
+
+
+.DeleteBackdropContainer {
+    /* max-width: 100px; */
+    /* border: 2px solid black; */
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    gap: 1em;
+}
+
+
+.DeleteBackdropButtons {
+    display: flex;
+    gap: 1.3em;
+}
+
+
+
+@media screen and (width <=520px) {
+    .Container {
+        width: 100%;
+        padding: 0em;
+    }
+
+    .formContainer {
+        flex-flow: column wrap;
+        gap: 1.8em;
+    }
+
+    .infoContainer {
+        width: 100%;
+    }
+
+    .input,
+    .radioContainer {
+        width: 90%;
+    }
+}

@@ -1,0 +1,84 @@
+:root{
+  --color-one: #0c306f;
+  --color-two: #1792d2;
+  --color-three: #2a2a2a;
+  --color-four: #3c3c3c;
+}
+
+.homeContainer {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  padding: 1.8em;
+}
+
+.add {
+  border: 2px solid black;
+  border-radius: 12px;
+  width: 3.8em;
+  height: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #0c306f;
+  color: white;
+  font-size: 2.5rem;
+}
+
+.addButton {
+  font-size: 1.14rem;
+  width: 70%;
+  margin: 0.8em 0;
+  /* height: 40%; */
+}
+
+.form {
+  font-size: 1rem;
+  width: 90%;
+  padding: 1em;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.3em;
+  h1 {
+    margin-bottom: 1em;
+  }
+  /* border: 2px solid red; */
+}
+
+.input,
+.radioContainer {
+  font-size: 1em;
+  width: 75%;
+  max-width: 400px;
+  /* border: 2px solid black; */
+}
+
+.radioContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: center;
+  width: 75%;
+  padding: 0 0.7em;
+}
+
+@media screen and (width < 520px) {
+
+  .homeContainer {
+    flex-flow: column wrap;
+  }
+
+  .form {
+    width: 100%;
+    font-size: 0.5rem;
+  }
+  .radioContainer {
+    padding: 0;
+  }
+}

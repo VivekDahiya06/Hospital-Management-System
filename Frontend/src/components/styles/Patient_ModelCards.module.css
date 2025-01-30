@@ -1,0 +1,101 @@
+:root{
+  --color-four: #3c3c3c;
+}
+
+.card {
+  /* margin: 1em 0; */
+  width: 100%;
+  padding: 2em;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  gap: 1em;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  /* border: 2px solid greenyellow; */
+  /* max-width: 600px; */
+  /* background: white; */
+  /* cursor: pointer; */
+}
+
+.main {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.info {
+  width: 50%;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: start;
+  gap: 0.5em;
+
+  span {
+    font-weight: bolder;
+  }
+
+  ul {
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: start;
+    gap: 0.3em;
+  }
+
+  ul > li {
+    list-style: none;
+  }
+}
+
+.animation {
+  width: 50%;
+  img {
+    width: 100%;
+  }
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.mobileButtons {
+  width: 100%;
+  display: none;
+}
+
+@media screen and (width < 520px) {
+  .card{
+    padding: .8em;
+    width: 80%;
+    border: 2px solid black;
+    gap: 2em;
+  }
+
+  .info{
+    width: 100%;
+  }
+
+  .animation{
+    display: none;
+  }
+
+  .buttons {
+    display: none;
+  }
+
+  .mobileButtons {
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
+
+@media screen and (width<=380px) {
+  .card{
+    width: 100%;
+    /* padding: .1em; */
+  }
+  
+}

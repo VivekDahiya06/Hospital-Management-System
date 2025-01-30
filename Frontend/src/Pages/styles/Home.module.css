@@ -1,0 +1,35 @@
+:root{
+    --color-one: #0c306f;
+    --color-two: #1792d2;
+    --color-three: #2a2a2a;
+    --color-four: #3c3c3c;
+  }
+
+.homeContainer{
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5em;
+}
+
+.card{
+    min-width: 20em;
+    height: 20%;
+    border: 2px solid black;
+    border-radius: 12px;
+    align-content: center;
+    justify-items: center;
+    cursor: pointer;
+}
+
+.h4{
+    color: var(--color-two);
+}
+
+@media screen and (width <= 768px) {
+    .homeContainer{
+        flex-direction: column;
+    }
+}
