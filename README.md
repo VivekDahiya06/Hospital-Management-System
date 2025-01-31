@@ -1,4 +1,4 @@
-# Hospital Management System
+# 🏥Hospital Management System
 
 ## Project Overview
 This project is a user-friendly web application designed to streamline hospital operations by managing patient records, doctor schedules, and appointments efficiently.
@@ -52,13 +52,13 @@ Ensure you have the following installed on your system:
 
 4. **Run the Backend Server:**
    ```bash
-   npm start
+   npm run dev
    ```
 
 5. **Run the Frontend Server:**
    ```bash
    cd frontend
-   npm start
+   npm run dev
    ```
 
 6. **Access the Application:**
@@ -68,20 +68,35 @@ Ensure you have the following installed on your system:
    ```
 
 ## Screenshots
-- **Dashboard:**
-  ![Dashboard Screenshot](./path-to-dashboard-image.png)
+- **Doctors:**
+  ![Doctors Screenshot](./Frontend/public/Screenshots/Doctors_Page.png)
 
-- **Patient Management:**
-  ![Patient Management Screenshot](./path-to-patient-management-image.png)
+- **Patients:**
+  ![Patients Screenshot](./Frontend/public/Screenshots/Patients_Page.png)
+
+- **Patients Info:**
+  ![Patinets Infomation Screenshot](./Frontend/public/Screenshots/Patients_Info.png)
+
+- **Add Doctors:**
+  ![Doctors Add Form Screenshot](./Frontend/public/Screenshots/Add_Doctors_Form.png)
+  
+- **Add Patients:**
+  ![Patients Add Form Screenshot](./Frontend/public/Screenshots/Add_Patients_Form.png)
 
 ## Functional Modules
 - **Patient Management:** Add, view, update, and delete patient information.
-- **Doctor Management:** Maintain doctor details and schedules.
-- **Appointments:** Schedule and track patient appointments.
+- **Doctor Management:** Maintain doctor details and add new doctors to the team.
+- **Appointments:** Track patient appointments.
 - **Data Security:** Ensures sensitive information remains protected.
 
+## Future Features (Upcoming...)
+- **Setting up Scheduled Appointments**
+- **Adding Location Via Google Maps**
+- **Setting up Online Meetings**
+- **Much More...**
+
 ## Contribution Guidelines
-We welcome contributions! Feel free to open issues or submit pull requests.
+I would love your suggestions for whatever new features should be added to it so feel free to open issues or submit pull requests.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
