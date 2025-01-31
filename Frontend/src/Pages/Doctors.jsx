@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './styles/Doctors.module.css'
 import Doctor_Card from '../components/Doctor_Card'
-import { Alert, Button, Dialog, DialogTitle, FormControlLabel, FormLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material'
+import { Alert, Button, Dialog, DialogContent, DialogTitle, FormControlLabel, FormLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material'
 import { AnimatePresence, motion } from 'motion/react'
 import BackdropModal from '../components/BackdropModal'
 import Header from '../components/Header'
@@ -10,10 +10,22 @@ import { AppContext } from '../Store/Context'
 
 const Doctors = () => {
 
+  const {
+    GlobalData: {
+      FormState,
+      AlertState,
+      AlertMessageState,
+      DeleteAlertState,
+      DoctorFormState,
+      Doctors_Data,
+      DoctorDataState,
+      initialState: {
+        Doctors
+      }
+    }
+  } = useContext(AppContext);
+
   const MotionButton = motion.create(Button);
-
-  const { GlobalData: { FormState, AlertState, AlertMessageState, DeleteState, DeleteAlertState, DoctorFormState, Doctors_Data, DoctorDataState, initialState: { Doctors } } } = useContext(AppContext);
-
 
   const [formOpen, setFormOpen] = FormState;
   const [deleteAlert, setDeleteAlert] = DeleteAlertState;
@@ -21,7 +33,7 @@ const Doctors = () => {
   const [alertMessage, setAlertMessage] = AlertMessageState;
   const [formData, setFormData] = DoctorFormState;
   const [doctor_Data, setDoctor_Data] = DoctorDataState;
-  const [Delete, setDelete] = DeleteState;
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
   useEffect(() => {
     setDoctor_Data(Doctors_Data);
@@ -29,12 +41,15 @@ const Doctors = () => {
 
 
 
+
   // Function to Open or Close Doctor Form
   const openAndCloseDoctorForm = () => {
+
     if (formData.name !== '' || formData.experience !== '' || formData.gender !== '' || formData.location !== '' || formData.specialization !== '' || formData.image !== '') {
       setFormData(Doctors)
     }
     setFormOpen(!formOpen);
+
   }
 
 
@@ -66,6 +81,7 @@ const Doctors = () => {
 
   // Function to handle input change
   const handleInputChange = (e) => {
+
     const { name, value, files } = e.target;
 
     if (name === "image" && files[0]) {
@@ -86,7 +102,7 @@ const Doctors = () => {
           setAlertMessage('');
           setAlertOpen(false);
         };
-        return; // Exit function to avoid setting non-file input below
+        return;
       }
     }
 
@@ -100,12 +116,14 @@ const Doctors = () => {
 
   return (
     <>
+      
       <Header />
+
       <div className={styles.mainContainer}>
         <div className={styles.Container}>
           {
             doctor_Data.map((doctor, index) => (
-              <Doctor_Card key={index} doctor={doctor} />
+              <Doctor_Card key={index} doctor={doctor} index={index} setDeleteIndex={setDeleteIndex} />
             ))
           }
         </div>
@@ -206,23 +224,41 @@ const Doctors = () => {
           </Alert>
         </Snackbar>
 
+        
         {/* Delete Backdrop opened on click of Delete Button */}
-
-
-        <Dialog
-          open={deleteAlert}
+          <Dialog
+            open={deleteAlert}
         >
-          <div className={styles.DeleteBackdropContainer}>
-            <DialogTitle>Are You Sure !!</DialogTitle>
-            <div className={styles.DeleteBackdropButtons}>
-              <Button variant='outlined' color='warning' onClick={() => {
-                setDelete(true);
-              }}>Yes</Button>
-              <Button variant='outlined' color='warning' onClick={() => { setDeleteAlert(false) }}>No</Button>
-            </div>
-          </div>
-        </Dialog>
+          
+            <DialogTitle sx={{
+              fontSize: '2rem',
+              fontWeight: 'bolder'
+            }}>
+              Are You Sure !!
+            </DialogTitle>
 
+            <DialogContent sx={{
+              display: 'flex',
+              justifyContent: 'space-evenly'
+            }}>
+              <Button
+                variant='outlined'
+                color='warning'
+                onClick={() => {
+                  doctor_Data.splice(deleteIndex, 1);
+                  setDeleteAlert(false);
+                }}>
+                Yes
+              </Button>
+              <Button
+                variant='outlined'
+                color='warning'
+                onClick={() => { setDeleteAlert(false) }}>
+                No
+              </Button>
+            </DialogContent>
+
+          </Dialog>
 
 
         {/* Edit Backdrop form opened on click of Edit Button */}

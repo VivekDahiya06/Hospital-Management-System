@@ -2,50 +2,30 @@
 import styles from './styles/Doctor_Card.module.css';
 import { Alert, Button, Dialog, DialogTitle, IconButton } from '@mui/material';
 import { motion } from 'motion/react';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { AppContext } from '../Store/Context';
-// import BackdropModal from './BackdropModal';
 
-const Doctor_Card = ({ doctor }) => {
+const Doctor_Card = ({index ,doctor, setDeleteIndex }) => {
 
-    // Motion Components
+    const { GlobalData: { DeleteAlertState } } = useContext(AppContext);
+
     const MotionIconButton = motion.create(IconButton);
     const MotionButton = motion.create(Button);
 
-    const { GlobalData: { DoctorDataState, DeleteState, DeleteAlertState } } = useContext(AppContext);
-    const [doctor_Data, setDoctor_Data] = DoctorDataState;
     const [deleteAlert, setDeleteAlert] = DeleteAlertState;
-    const [Delete, setDelete] = DeleteState;
+    
 
-
-    // Functions
+    // Function to edit the details of the doctor
     const handleEdit = () => {
         console.log("Edit");
     }
-
-    //! Make this function Asynchronous in order to delete card
-    const handleDelete = async () => {
-        try {
-            setDeleteAlert(true);
-            const promise = await new Promise((resolve, reject) => {
-                console.log("Pending !!!")
-                if (Delete) resolve("Card Deleted !!!")
-                else reject("Deletion Canceled")
-            });
-
-            console.log(promise);
-            const New_Data = doctor_Data.filter((element) => element.name !== doctor.name);
-            setDoctor_Data([...New_Data]);
-            setDelete(false);
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            setDeleteAlert(false);
-        }
+    
+    // Function to delete a doctor
+    const handleDelete = () => {
+        setDeleteAlert(true);
+        setDeleteIndex(index);
     }
 
 
@@ -119,14 +99,6 @@ const Doctor_Card = ({ doctor }) => {
                 </div>
 
             </motion.div >
-
-            {/* <Dialog>
-                <DialogTitle>Are You Sure</DialogTitle>
-                <div>
-                    <Button color='warning'>Yes</Button>
-                    <Button color='warning'>No</Button>
-                </div>
-            </Dialog> */}
         </>
     )
 }

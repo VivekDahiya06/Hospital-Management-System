@@ -22,8 +22,6 @@ export const initialState = {
 
     AlertMessage: '',
     
-    Delete: false,
-    
     DeleteAlert: false,
 }
 
