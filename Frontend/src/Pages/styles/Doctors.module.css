@@ -140,8 +140,12 @@
 }
 
 @media screen and (width <= 380px) {
+
     .NotFoundContainer {
         font-size: .8rem;
     }
-    
+
+    .mainContainer{
+        padding: 1em;
+    }
 }

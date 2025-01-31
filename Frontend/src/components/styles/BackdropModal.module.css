@@ -33,3 +33,9 @@
     padding: .2em;
   } 
 }
+
+@media screen and (width <= 520px) {
+  .Box{
+    height: 80%;
+  }
+}

@@ -257,7 +257,10 @@ const Doctors = () => {
 
         <DialogTitle sx={{
           fontSize: '2rem',
-          fontWeight: 'bolder'
+          fontWeight: 'bolder',
+          '@media screen and (width <= 380px)': {
+            fontSize: '1.5rem'
+          }
         }}>
           Are You Sure ?
         </DialogTitle>
@@ -267,8 +270,8 @@ const Doctors = () => {
           justifyContent: 'space-evenly'
         }}>
           <Button
-            variant='outlined'
-            color='warning'
+            variant='contained'
+            color='error'
             onClick={() => {
               doctor_Data.splice(deleteIndex, 1);
               setDeleteAlert(false);
@@ -276,8 +279,8 @@ const Doctors = () => {
             Yes
           </Button>
           <Button
-            variant='outlined'
-            color='warning'
+            variant='contained'
+            color='success'
             onClick={() => { setDeleteAlert(false) }}>
             No
           </Button>
