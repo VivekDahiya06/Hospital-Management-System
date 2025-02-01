@@ -3,6 +3,7 @@ import styles from './styles/Patients.module.css';
 import Patient_Card from '../components/Patient_Card';
 import Patient_ModelCards from '../components/Patient_ModelCards';
 import { AppContext } from '../Store/Context';
+import No_Patients_Found from '../assets/Images/No_Patients_Found.png';
 import {
   Alert,
   Autocomplete,
@@ -110,172 +111,197 @@ const Patients = () => {
     <>
 
       <Header />
-      <div className={styles.homeContainer}>
+      {
+        patient_Data.length === 0 ? (
 
-        {/* Patient Cards */}
-        {
-          patient_Data.map((patient, index) => (
-            isMobile
-              ? <Patient_ModelCards key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
-              : <Patient_Card key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
-          ))
-        }
-
-
-        {/* Desktop Add Button */}
-        {
-          !isMobile &&
-          <div className={styles.add} onClick={addCard}>
-            +
-          </div>
-        }
-
-
-        {/* Mobile Add Button */}
-        {
-          isMobile &&
-          <div className={styles.addButton} onClick={addCard}>
-            <Button
+          <div className={styles.NotFoundContainer}>
+            <div className={styles.NotFoundImageContainer}>
+              <h1>No Patients Found</h1>
+              <img src={No_Patients_Found} alt='No Patients Found' style={{ width: "50%", height: "50%" }} />
+            </div>
+            <MotionButton
+              whileHover={{ scale: 1.1 }}
               variant="contained"
-              fullWidth={true}
               sx={{
-                height: '2.7em',
-                fontSize: 'inherit'
+                fontSize: "1.2rem",
+                width: "5em",
+                margin: "0.8em 0",
+                "@media screen and (width <= 520px)": {
+                  width: "70%",
+                }
               }}
               onClick={addCard}
             >
               Add
-            </Button>
+            </MotionButton>
           </div>
+        ) : (
+          <div className={styles.homeContainer}>
+            {/* Patient Cards */}
+            {
+              patient_Data.map((patient, index) => (
+                isMobile
+                  ? <Patient_ModelCards key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
+                  : <Patient_Card key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
+              ))
+            }
+
+            {/* Desktop Add Button */}
+            {
+              !isMobile &&
+              <div className={styles.add} onClick={addCard}>
+                +
+              </div>
+            }
+
+
+            {/* Mobile Add Button */}
+            {
+              isMobile &&
+              <div className={styles.addButton} onClick={addCard}>
+                <Button
+                  variant="contained"
+                  fullWidth={true}
+                  sx={{
+                    height: '2.7em',
+                    fontSize: 'inherit'
+                  }}
+                  onClick={addCard}
+                >
+                  Add
+                </Button>
+              </div>
+            }
+          </div >
+        )
+      }
+
+
+      {/* Backdrop Modal for adding new card */}
+      <AnimatePresence>
+        {
+          formOpen && (
+            <BackdropModal modalHandler={addCard}>
+
+              {/* Form */}
+              <form className={styles.form} onSubmit={formHandler}>
+                <h1>Add Patient</h1>
+                <TextField className={styles.input} label="Name" name='name' color='primary' onChange={handleInputChange} />
+                <TextField className={styles.input} label="Age" name='age' color='primary' onChange={handleInputChange} />
+                <div className={styles.radioContainer}>
+                  <FormLabel>Gender</FormLabel>
+                  <RadioGroup row name='gender' onChange={handleInputChange} sx={{ '@media (max-width: 520px)': { flexDirection: 'column' } }}>
+                    <FormControlLabel label="Male" value='male' control={<Radio />} />
+                    <FormControlLabel label="Female" value='female' control={<Radio />} />
+                  </RadioGroup>
+                </div>
+                <TextField className={styles.input} label="Address" name='address' color='primary' onChange={handleInputChange} />
+                <Autocomplete
+                  className={styles.input}
+                  multiple
+                  freeSolo
+                  selectOnFocus
+                  name='symptoms'
+                  limitTags={2}
+                  options={symptomsOptions}
+                  sx={{
+                    '& .MuiChip-sizeMedium': {
+                      backgroundColor: '#0c306f',  // Change background color of selected items
+                      color: 'white',                // Change text color of selected items
+                    },
+                    '& .MuiChip-deleteIcon': {
+                      color: '#fafafa',
+                      '&:hover': {
+                        color: '#8c8c8c'
+                      }
+                    },
+                  }}
+                  onChange={(e, newValue) => {
+                    setFormData({ ...formData, symptoms: newValue });
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Symptoms" />
+                    )
+                  }}
+                />
+                <MotionButton
+                  className={styles.submitButton}
+                  whileHover={{ scale: 1.08 }}
+                  sx={{
+                    '@media (max-width: 520px)': {
+                      margin: "0.8em 0",
+                    },
+                  }}
+                  variant='outlined'
+                  type='submit'>
+                  Submit
+                </MotionButton>
+              </form>
+
+            </BackdropModal>
+          )
         }
+      </AnimatePresence>
 
 
-        {/* Backdrop Modal for adding new card */}
-        <AnimatePresence>
-          {
-            formOpen && (
-              <BackdropModal modalHandler={addCard}>
-
-                {/* Form */}
-                <form className={styles.form} onSubmit={formHandler}>
-                  <h1>Add Patient</h1>
-                  <TextField className={styles.input} label="Name" name='name' color='primary' onChange={handleInputChange} />
-                  <TextField className={styles.input} label="Age" name='age' color='primary' onChange={handleInputChange} />
-                  <div className={styles.radioContainer}>
-                    <FormLabel>Gender</FormLabel>
-                    <RadioGroup row name='gender' onChange={handleInputChange} sx={{ '@media (max-width: 520px)': { flexDirection: 'column' } }}>
-                      <FormControlLabel label="Male" value='male' control={<Radio />} />
-                      <FormControlLabel label="Female" value='female' control={<Radio />} />
-                    </RadioGroup>
-                  </div>
-                  <TextField className={styles.input} label="Address" name='address' color='primary' onChange={handleInputChange} />
-                  <Autocomplete
-                    className={styles.input}
-                    multiple
-                    freeSolo
-                    selectOnFocus
-                    name='symptoms'
-                    limitTags={2}
-                    options={symptomsOptions}
-                    sx={{
-                      '& .MuiChip-sizeMedium': {
-                        backgroundColor: '#0c306f',  // Change background color of selected items
-                        color: 'white',                // Change text color of selected items
-                      },
-                      '& .MuiChip-deleteIcon': {
-                        color: '#fafafa',
-                        '&:hover': {
-                          color: '#8c8c8c'
-                        }
-                      },
-                    }}
-                    onChange={(e, newValue) => {
-                      setFormData({ ...formData, symptoms: newValue });
-                    }}
-                    renderInput={(params) => {
-                      return (
-                        <TextField {...params} label="Symptoms" />
-                      )
-                    }}
-                  />
-                  <MotionButton
-                    className={styles.submitButton}
-                    whileHover={{ scale: 1.08 }}
-                    sx={{
-                      '@media (max-width: 520px)': {
-                        margin: "0.8em 0",
-                      },
-                    }}
-                    variant='outlined'
-                    type='submit'>
-                    Submit
-                  </MotionButton>
-                </form>
-
-              </BackdropModal>
-            )
-          }
-        </AnimatePresence>
-
-
-        {/* Alert Message for Errors & Warnings */}
-        <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          open={alertOpen}
-          autoHideDuration={2000}
+      {/* Alert Message for Errors & Warnings */}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={alertOpen}
+        autoHideDuration={2000}
+        onClose={() => setAlertOpen(false)}
+      >
+        <Alert
           onClose={() => setAlertOpen(false)}
+          severity="error"
+          variant='filled'
         >
-          <Alert
-            onClose={() => setAlertOpen(false)}
-            severity="error"
-            variant='filled'
-          >
-            {alertMessage}
-          </Alert>
-        </Snackbar>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
 
-        {/* Delete Backdrop opened on click of Delete Button */}
+      {/* Delete Backdrop opened on click of Delete Button */}
 
-        <Dialog
-          open={deleteAlert}
-        >
-          <DialogTitle
-            sx={{
-              fontSize: '2rem',
-              fontWeight: 'bolder',
-              '@media screen and (width <= 380px)': {
-                fontSize: '1.5rem'
-              }
+      <Dialog
+        open={deleteAlert}
+      >
+        <DialogTitle
+          sx={{
+            fontSize: '2rem',
+            fontWeight: 'bolder',
+            '@media screen and (width <= 380px)': {
+              fontSize: '1.5rem'
+            }
+          }}>
+          Are You Sure ?
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-evenly'
+          }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              patient_Data.splice(deleteIndex, 1);
+              setDeleteAlert(false);
             }}>
-            Are You Sure ?
-          </DialogTitle>
-          <DialogContent
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-evenly'
-            }}>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                patient_Data.splice(deleteIndex, 1);
-                setDeleteAlert(false);
-              }}>
-              Yes
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => { setDeleteAlert(false) }}>
-              No
-            </Button>
-          </DialogContent>
-        </Dialog>
+            Yes
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => { setDeleteAlert(false) }}>
+            No
+          </Button>
+        </DialogContent>
+      </Dialog>
 
 
-        {/* Edit Backdrop form opened on click of Edit Button */}
+      {/* Edit Backdrop form opened on click of Edit Button */}
 
-      </div>
     </>
   );
 };

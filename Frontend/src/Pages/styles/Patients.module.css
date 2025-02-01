@@ -1,8 +1,29 @@
-:root{
+:root {
   --color-one: #0c306f;
   --color-two: #1792d2;
   --color-three: #2a2a2a;
   --color-four: #3c3c3c;
+}
+
+.NotFoundContainer {
+  margin-top: 3em;
+  width: 50%;
+  height: 20%;
+  display: grid;
+  place-self: center;
+  place-items: center;
+}
+
+.NotFoundImageContainer {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    min-width: 250px;
+  }
 }
 
 .homeContainer {
@@ -45,9 +66,11 @@
   justify-content: center;
   align-items: center;
   gap: 1.3em;
+
   h1 {
     margin-bottom: 1em;
   }
+
   /* border: 2px solid red; */
 }
 
@@ -70,6 +93,15 @@
 
 @media screen and (width < 520px) {
 
+  .NotFoundContainer {
+    width: 100%;
+    gap: 2em;
+  }
+
+  .NotFoundImageContainer {
+    gap: 2em;
+  }
+
   .homeContainer {
     flex-flow: column wrap;
   }
@@ -78,7 +110,19 @@
     width: 100%;
     font-size: 0.5rem;
   }
+
   .radioContainer {
     padding: 0;
+  }
+}
+
+@media screen and (width <= 380px) {
+
+  .NotFoundContainer {
+      font-size: .8rem;
+  }
+
+  .mainContainer{
+      padding: 1em;
   }
 }
