@@ -7,6 +7,9 @@ import {
   Alert,
   Autocomplete,
   Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   FormLabel,
   Radio,
@@ -21,7 +24,7 @@ import Header from '../components/Header';
 const Patients = () => {
 
   const MotionButton = motion.create(Button);
-  const { GlobalData: { FormState, AlertState, AlertMessageState, PatientFormState, Patient_Data, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
+  const { GlobalData: { FormState, AlertState, DeleteAlertState, AlertMessageState, PatientFormState, Patient_Data, PatientDataState, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
 
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 520);
@@ -29,6 +32,9 @@ const Patients = () => {
   const [alertOpen, setAlertOpen] = AlertState;
   const [alertMessage, setAlertMessage] = AlertMessageState;
   const [formData, setFormData] = PatientFormState;
+  const [deleteAlert, setDeleteAlert] = DeleteAlertState;
+  const [deleteIndex, setDeleteIndex] = useState(null);
+  const [patient_Data, setPatient_Data] = PatientDataState;
 
 
 
@@ -38,6 +44,10 @@ const Patients = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    setPatient_Data(Patient_Data);
+  }, [])
 
 
 
@@ -104,10 +114,10 @@ const Patients = () => {
 
         {/* Patient Cards */}
         {
-          Patient_Data.map((patient, index) => (
+          patient_Data.map((patient, index) => (
             isMobile
-              ? <Patient_ModelCards key={patient.id || index} patient={patient} />
-              : <Patient_Card key={patient.id || index} patient={patient} />
+              ? <Patient_ModelCards key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
+              : <Patient_Card key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
           ))
         }
 
@@ -225,17 +235,42 @@ const Patients = () => {
         </Snackbar>
 
         {/* Delete Backdrop opened on click of Delete Button */}
-        {false &&
-          <BackdropModal>
-            <div className={styles.DeleteBackdropContainer}>
-              <h1>Are You Sure !!</h1>
-              <div className={styles.DeleteBackdropButtons}>
-                <Button>Yes</Button>
-                <Button>No</Button>
-              </div>
-            </div>
-          </BackdropModal>
-        }
+
+        <Dialog
+          open={deleteAlert}
+        >
+          <DialogTitle
+            sx={{
+              fontSize: '2rem',
+              fontWeight: 'bolder',
+              '@media screen and (width <= 380px)': {
+                fontSize: '1.5rem'
+              }
+            }}>
+            Are You Sure ?
+          </DialogTitle>
+          <DialogContent
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-evenly'
+            }}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                patient_Data.splice(deleteIndex, 1);
+                setDeleteAlert(false);
+              }}>
+              Yes
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => { setDeleteAlert(false) }}>
+              No
+            </Button>
+          </DialogContent>
+        </Dialog>
 
 
         {/* Edit Backdrop form opened on click of Edit Button */}

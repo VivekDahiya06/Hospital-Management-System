@@ -11,7 +11,7 @@ import bandage from '../assets/Images/bandage.svg';
 import medic_Box from '../assets/Images/medicine-box.svg';
 
 
-const Patient_Card = ({ patient }) => {
+const Patient_Card = ({ patient, index, setDeleteIndex }) => {
     const [open, setOpen] = useState(false);
 
     // Function to open and close the model
@@ -40,9 +40,10 @@ const Patient_Card = ({ patient }) => {
 
             {/* Modal with Slide Transition */}
             <AnimatePresence>
-                {open &&
+                {
+                    open &&
                     <BackdropModal modalHandler={handleClose}>
-                        <Patient_ModelCards patient={patient}/>
+                        <Patient_ModelCards patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
                     </BackdropModal>
                 }
             </AnimatePresence>

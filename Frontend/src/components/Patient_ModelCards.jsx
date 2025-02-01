@@ -1,19 +1,26 @@
 import styles from './styles/Patient_ModelCards.module.css';
 import { Button, IconButton } from '@mui/material';
 import { motion } from 'motion/react';
+import { useContext } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { AppContext } from '../Store/Context';
 
 
-const Patient_ModelCards = ({ patient }) => {
+const Patient_ModelCards = ({ patient, index, setDeleteIndex }) => {
+
+    const {GlobalData:{DeleteAlertState}} = useContext(AppContext);
 
     const MotionButton = motion.create(Button);
+
+    const [deleteAlert, setDeleteAlert] = DeleteAlertState;
 
     const handleEdit = () => {
         console.log("Edit");
     }
     const handleDelete = () => {
-        console.log("Delete");
+        setDeleteAlert(true);
+        setDeleteIndex(index);
     }
 
     return (

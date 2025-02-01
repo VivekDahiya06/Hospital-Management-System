@@ -6,6 +6,7 @@ export const AppContext = createContext();
 
 const Context = ({ children }) => {
     const DoctorDataState = useState([]);
+    const PatientDataState = useState([]);
     const DoctorFormState = useState(initialState.Doctors);
     const PatientFormState = useState(initialState.Patients);
     const FormState = useState(initialState.Form);
@@ -18,6 +19,7 @@ const Context = ({ children }) => {
         Patient_Data,
         Doctors_Data,
         DoctorDataState,
+        PatientDataState,
         symptomsOptions,
         DoctorFormState,
         PatientFormState,
