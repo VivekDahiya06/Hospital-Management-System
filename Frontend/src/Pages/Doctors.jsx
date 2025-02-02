@@ -8,74 +8,98 @@ import Header from '../components/Header'
 import { GrDocumentUpdate } from "react-icons/gr";
 import { AppContext } from '../Store/Context';
 import No_Doctors_Found from '../assets/Images/No_Doctors_Found.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
+import { Alert_Close, Alert_Open } from '../Redux/Features/AlertSlice'
+import { Delete_Alert_Close } from '../Redux/Features/Doctors/Delete_Slice'
+import { Reset_Doctors_Details, Set_Doctors_Details } from '../Redux/Features/Doctors/Add_Slice'
+import { Reset_Edit_Doctors_Details } from '../Redux/Features/Doctors/Edit_Slice'
 
 const Doctors = () => {
 
+  const dispatch = useDispatch();
+  const formOpen = useSelector((state) => state.form_open.add_open);
+  const editFormOpen = useSelector((state) => state.form_open.edit_open);
+  const alertOpen = useSelector((state) => state.alert.open);
+  const alertMessage = useSelector((state) => state.alert.message);
+  const deleteAlert = useSelector((state) => state.Doctors_delete.alert_open);
+  const deleteIndex = useSelector((state) => state.Doctors_delete.index);
+  const formData = useSelector((state) => state.Doctors_add.add_form_data);
+
+
   const {
     GlobalData: {
-      FormState,
-      AlertState,
-      AlertMessageState,
-      DeleteAlertState,
-      DoctorFormState,
       Doctors_Data,
       DoctorDataState,
-      initialState: {
-        Doctors
-      }
     }
   } = useContext(AppContext);
 
   const MotionButton = motion.create(Button);
-
-  const [formOpen, setFormOpen] = FormState;
-  const [deleteAlert, setDeleteAlert] = DeleteAlertState;
-  const [alertOpen, setAlertOpen] = AlertState;
-  const [alertMessage, setAlertMessage] = AlertMessageState;
-  const [formData, setFormData] = DoctorFormState;
+  
   const [doctor_Data, setDoctor_Data] = DoctorDataState;
-  const [deleteIndex, setDeleteIndex] = useState(null);
+
 
   useEffect(() => {
-    setDoctor_Data(Doctors_Data);
+    setDoctor_Data([...Doctors_Data]);
   }, [])
 
 
 
 
-  // Function to Open or Close Doctor Form
-  const openAndCloseDoctorForm = () => {
+  // Function to Open or Close Doctor Add Form / Edit Form
+  const openAndCloseDoctorForm = (type) => {
 
-    if (formData.name !== '' || formData.experience !== '' || formData.gender !== '' || formData.location !== '' || formData.specialization !== '' || formData.image !== '') {
-      setFormData(Doctors)
+    if (formData.name || formData.experience || formData.gender || formData.location || formData.specialization || formData.image) {
+      dispatch(Reset_Doctors_Details());
     }
-    setFormOpen(!formOpen);
+
+    dispatch(Form_Open_And_Close(type));
   }
 
 
   // Function to handle form submission
-  const formHandler = (e) => {
+  const add_formHandler = (e) => {
 
     e.preventDefault();
-    if (formData.name === '' || formData.experience === '' || formData.gender === '' || formData.location === '' || formData.specialization === '') {
-      setAlertOpen(true);
-      setAlertMessage("Please Fill All The Fields");
+    if (!formData.name || !formData.experience || !formData.gender || !formData.location || !formData.specialization) {
+      dispatch(Alert_Open("Please Fill All The Fields"));
       return;
     }
 
-    else if (formData.image === '') {
-      setAlertOpen(true);
-      setAlertMessage("Image Not Found !!");
+    else if (!formData.image) {
+      dispatch(Alert_Open("Image Not Found !!"));
       return;
     }
 
     console.log(formData);
 
-    Doctors_Data.push(formData);
-    setAlertMessage('');
-    setAlertOpen(false);
-    setFormData(Doctors)
-    setFormOpen(false);
+    doctor_Data.push(formData);
+    dispatch(Alert_Close());
+    dispatch(Reset_Doctors_Details());
+    dispatch(Form_Open_And_Close('add_form'));
+  }
+
+
+  // Function to handle form submission
+  const edit_formHandler = (e) => {
+
+    e.preventDefault();
+    if (!formData.name || !formData.experience || !formData.gender || !formData.location || !formData.specialization) {
+      dispatch(Alert_Open("Please Fill All The Fields"));
+      return;
+    }
+
+    else if (!formData.image) {
+      dispatch(Alert_Open("Image Not Found !!"));
+      return;
+    }
+
+    console.log(formData);
+
+    doctor_Data.splice(deleteIndex, 1, formData);
+    dispatch(Alert_Close());
+    dispatch(Reset_Doctors_Details());
+    dispatch(Form_Open_And_Close('edit_form'));
   }
 
 
@@ -93,24 +117,14 @@ const Doctors = () => {
         reader.readAsDataURL(file);
 
         reader.onload = () => {
-
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: reader.result,
-          }));
-
-          setAlertMessage('');
-          setAlertOpen(false);
+          dispatch(Set_Doctors_Details({ [name]: reader.result }));
+          dispatch(Alert_Close());
         };
         return;
       }
     }
 
-    // Handle non-image input fields
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    dispatch(Set_Doctors_Details({ [name]: value }));
   };
 
 
@@ -137,7 +151,7 @@ const Doctors = () => {
                   width: "70%",
                 }
               }}
-              onClick={openAndCloseDoctorForm}
+              onClick={() => openAndCloseDoctorForm('add_form')}
             >
               Add
             </MotionButton>
@@ -147,7 +161,7 @@ const Doctors = () => {
             <div className={styles.Container}>
               {
                 doctor_Data.map((doctor, index) => (
-                  <Doctor_Card key={index} doctor={doctor} index={index} setDeleteIndex={setDeleteIndex} />
+                  <Doctor_Card key={index} doctor={doctor} index={index} />
                 ))
               }
             </div>
@@ -162,20 +176,20 @@ const Doctors = () => {
                   width: "70%",
                 }
               }}
-              onClick={openAndCloseDoctorForm}
+              onClick={() => openAndCloseDoctorForm('add_form')}
             >
               Add
             </MotionButton>
           </div>
         )}
-            {/* Backdrop Modal for adding new card */}
+      {/* Backdrop Modal for adding new card */}
       <AnimatePresence>
         {
           formOpen && (
-            <BackdropModal modalHandler={openAndCloseDoctorForm}>
+            <BackdropModal modalHandler={() => openAndCloseDoctorForm('add_form')}>
 
               {/* Form */}
-              <form className={styles.form} onSubmit={formHandler}>
+              <form className={styles.form} onSubmit={add_formHandler}>
                 <h1>Add Doctor</h1>
 
                 {/* Form Container having Info Container and Image Upload Container */}
@@ -224,7 +238,6 @@ const Doctors = () => {
                   type='submit'>
                   Submit
                 </MotionButton>
-
               </form>
 
             </BackdropModal>
@@ -238,12 +251,11 @@ const Doctors = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={alertOpen}
         autoHideDuration={2000}
-        onClose={() => setAlertOpen(false)}
+        onClose={() => dispatch(Alert_Close())}
       >
         <Alert
-          onClose={() => setAlertOpen(false)}
-          severity='error'
-          variant='filled'
+          severity="error"
+          variant="filled"
         >
           {alertMessage}
         </Alert>
@@ -274,14 +286,14 @@ const Doctors = () => {
             color='error'
             onClick={() => {
               doctor_Data.splice(deleteIndex, 1);
-              setDeleteAlert(false);
+              dispatch(Delete_Alert_Close())
             }}>
             Yes
           </Button>
           <Button
             variant='contained'
             color='success'
-            onClick={() => { setDeleteAlert(false) }}>
+            onClick={() => dispatch(Delete_Alert_Close())}>
             No
           </Button>
         </DialogContent>
@@ -290,6 +302,64 @@ const Doctors = () => {
 
 
       {/* Edit Backdrop form opened on click of Edit Button */}
+      {
+        editFormOpen && (
+          <BackdropModal modalHandler={() => openAndCloseDoctorForm('edit_form')}>
+
+            {/* Form */}
+            <form className={styles.form} onSubmit={edit_formHandler}>
+              <h1>Edit Doctor</h1>
+
+              {/* Form Container having Info Container and Image Upload Container */}
+              <div className={styles.formContainer}>
+
+                {/* Info Container having all the info */}
+                <section className={styles.infoContainer}>
+                  <TextField className={styles.input} label="Name" name='name' color='primary' value={formData.name} onChange={handleInputChange} />
+                  <TextField className={styles.input} label="Experience" name='experience' color='primary' value={formData.experience} onChange={handleInputChange} />
+                  <div className={styles.radioContainer}>
+                    <FormLabel>Gender</FormLabel>
+                    <RadioGroup row name='gender' value={formData.gender} onChange={handleInputChange} sx={{ '@media (max-width: 520px)': { flexDirection: 'column' } }}>
+                      <FormControlLabel label="Male" value='male' control={<Radio />} />
+                      <FormControlLabel label="Female" value='female' control={<Radio />} />
+                    </RadioGroup>
+                  </div>
+                  <TextField className={styles.input} label="Specialization" name='specialization' color='primary' value={formData.specialization} onChange={handleInputChange} />
+                  <TextField className={styles.input} label="Location" name='location' color='primary' value={formData.location} onChange={handleInputChange} />
+                </section>
+
+                {/* Image Upload */}
+                <section className={styles.imageUpload}>
+                  <div className={styles.imageUploadContainer}>
+                    <label htmlFor='image' className={styles.imageUploadLabel}>
+                      <GrDocumentUpdate style={{ width: '100%', height: '100%' }} />
+                      <span>Upload Image</span>
+                    </label>
+                    <input
+                      id='image'
+                      type='file'
+                      name='image'
+                      onChange={handleInputChange}
+                      style={{ display: 'none' }}
+                    />
+                  </div>
+                </section>
+              </div>
+
+              {/* Submit Button */}
+              <MotionButton
+                whileHover={{ scale: 1.08 }}
+                sx={{
+                  margin: '1.2em 0',
+                }}
+                variant='outlined'
+                type='submit'>
+                Edit
+              </MotionButton>
+            </form>
+          </BackdropModal>
+        )
+      }
 
     </>
   )

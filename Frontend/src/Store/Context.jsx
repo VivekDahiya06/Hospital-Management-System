@@ -7,13 +7,13 @@ export const AppContext = createContext();
 const Context = ({ children }) => {
     const DoctorDataState = useState([]);
     const PatientDataState = useState([]);
-    const DoctorFormState = useState(initialState.Doctors);
+    const DoctorFormState = useState(initialState.Doctors_Initial_State);
     const PatientFormState = useState(initialState.Patients);
     const FormState = useState(initialState.Form);
     const AlertState = useState(initialState.Alert);
     const AlertMessageState = useState(initialState.AlertMessage);
-    const AlertTypeState = useState(initialState.AlertType);
     const DeleteAlertState = useState(initialState.DeleteAlert);
+    const EditFormOpenState = useState(initialState.EditFormOpen);
 
     const GlobalData = {
         Patient_Data,
@@ -26,8 +26,8 @@ const Context = ({ children }) => {
         FormState,
         AlertState,
         AlertMessageState,
-        AlertTypeState,
         DeleteAlertState,
+        EditFormOpenState,
         initialState
     }
 

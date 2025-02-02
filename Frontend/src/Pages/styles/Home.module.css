@@ -1,11 +1,11 @@
-:root{
+:root {
     --color-one: #0c306f;
     --color-two: #1792d2;
     --color-three: #2a2a2a;
     --color-four: #3c3c3c;
-  }
+}
 
-.homeContainer{
+.homeContainer {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -14,7 +14,7 @@
     gap: 1.5em;
 }
 
-.card{
+.card {
     min-width: 20em;
     height: 20%;
     border: 2px solid black;
@@ -24,12 +24,13 @@
     cursor: pointer;
 }
 
-.h4{
+.h4 {
     color: var(--color-two);
 }
 
-@media screen and (width <= 768px) {
-    .homeContainer{
+
+@media screen and (width <=768px) {
+    .homeContainer {
         flex-direction: column;
     }
 }

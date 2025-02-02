@@ -6,26 +6,30 @@ import { useContext, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { AppContext } from '../Store/Context';
+import { useDispatch, useSelector } from 'react-redux';
+import { Delete_Alert_Open, Delete_Index } from '../Redux/Features/Doctors/Delete_Slice';
+import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
+import { Set_Doctors_Details } from '../Redux/Features/Doctors/Add_Slice';
 
-const Doctor_Card = ({index ,doctor, setDeleteIndex }) => {
-
-    const { GlobalData: { DeleteAlertState } } = useContext(AppContext);
-
+const Doctor_Card = ({ index, doctor }) => {
+    
+    const dispatch = useDispatch()
+    
     const MotionIconButton = motion.create(IconButton);
     const MotionButton = motion.create(Button);
-
-    const [deleteAlert, setDeleteAlert] = DeleteAlertState;
     
 
     // Function to edit the details of the doctor
     const handleEdit = () => {
-        console.log("Edit");
+        dispatch(Form_Open_And_Close('edit_form'))
+        dispatch(Set_Doctors_Details(doctor));
+        dispatch(Delete_Index(index))
     }
     
     // Function to delete a doctor
     const handleDelete = () => {
-        setDeleteAlert(true);
-        setDeleteIndex(index);
+        dispatch(Delete_Alert_Open());
+        dispatch(Delete_Index(index))
     }
 
 

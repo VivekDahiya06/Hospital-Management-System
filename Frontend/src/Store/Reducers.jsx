@@ -1,5 +1,5 @@
 export const initialState = {
-    Doctors: {
+    Doctors_Initial_State: {
         name: '',
         experience: '',
         gender: '',
@@ -16,12 +16,14 @@ export const initialState = {
         symptoms: []
     },
 
-    Form: false,
+    // Form: false,
 
     Alert: false,
 
     AlertMessage: '',
     
     DeleteAlert: false,
+
+    EditFormOpen: false,
 }
 
