@@ -13,7 +13,6 @@ import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
 import { Alert_Close, Alert_Open } from '../Redux/Features/AlertSlice'
 import { Delete_Alert_Close } from '../Redux/Features/Doctors/Delete_Slice'
 import { Reset_Doctors_Details, Set_Doctors_Details } from '../Redux/Features/Doctors/Add_Slice'
-import { Reset_Edit_Doctors_Details } from '../Redux/Features/Doctors/Edit_Slice'
 
 const Doctors = () => {
 
@@ -71,8 +70,6 @@ const Doctors = () => {
       return;
     }
 
-    console.log(formData);
-
     doctor_Data.push(formData);
     dispatch(Alert_Close());
     dispatch(Reset_Doctors_Details());
@@ -93,8 +90,6 @@ const Doctors = () => {
       dispatch(Alert_Open("Image Not Found !!"));
       return;
     }
-
-    console.log(formData);
 
     doctor_Data.splice(deleteIndex, 1, formData);
     dispatch(Alert_Close());
@@ -181,7 +176,10 @@ const Doctors = () => {
               Add
             </MotionButton>
           </div>
-        )}
+        )
+      }
+
+      
       {/* Backdrop Modal for adding new card */}
       <AnimatePresence>
         {
