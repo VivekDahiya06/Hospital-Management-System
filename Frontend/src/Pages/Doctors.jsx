@@ -1,19 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react'
-import styles from './styles/Doctors.module.css'
-import Doctor_Card from '../components/Doctor_Card'
-import { Alert, Button, Dialog, DialogContent, DialogTitle, FormControlLabel, FormLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material'
-import { AnimatePresence, motion } from 'motion/react'
-import BackdropModal from '../components/BackdropModal'
-import Header from '../components/Header'
+import { useContext, useEffect, useState } from 'react';
+import styles from './styles/Doctors.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { AnimatePresence, motion } from 'motion/react';
+import { Alert, Button, Dialog, DialogContent, DialogTitle, FormControlLabel, FormLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material';
+import Doctor_Card from '../components/Doctor_Card';
+import BackdropModal from '../components/BackdropModal';
+import Header from '../components/Header';
 import { GrDocumentUpdate } from "react-icons/gr";
 import { AppContext } from '../Store/Context';
-import No_Doctors_Found from '../assets/Images/No_Doctors_Found.png';
-import { useDispatch, useSelector } from 'react-redux';
 import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
-import { Alert_Close, Alert_Open } from '../Redux/Features/AlertSlice'
-import { Delete_Alert_Close } from '../Redux/Features/Delete_Slice'
-import { Reset_Details, Set_Details } from '../Redux/Features/Add_Slice'
-import { Edit_Alert_Close, Edit_Alert_Open } from '../Redux/Features/Edit_Slice'
+import { Alert_Close, Alert_Open } from '../Redux/Features/AlertSlice';
+import { Delete_Alert_Close } from '../Redux/Features/Delete_Slice';
+import { Reset_Details, Set_Details } from '../Redux/Features/Add_Slice';
+import { Edit_Alert_Close, Edit_Alert_Open } from '../Redux/Features/Edit_Slice';
+import No_Doctors_Found from '../assets/Images/No_Doctors_Found.png';
 
 const Doctors = () => {
 
@@ -25,18 +25,16 @@ const Doctors = () => {
   const deleteAlert = useSelector((state) => state.delete.alert_open);
   const editAlert = useSelector((state) => state.edit.alert_open);
   const deleteIndex = useSelector((state) => state.delete.index);
-  const formData = useSelector((state) => state.add.add_form_data);
+  const formData = useSelector((state) => state.add.add_doctor_form_data);
+
+  const [imageSrc, setImageSrc] = useState(null);
 
 
-  const {
-    GlobalData: {
-      Doctors_Data,
-      DoctorDataState,
-    }
-  } = useContext(AppContext);
+  const { GlobalData: { Doctors_Data, DoctorDataState } } = useContext(AppContext);
 
   const MotionButton = motion.create(Button);
 
+  // state replicating data coming from API
   const [doctor_Data, setDoctor_Data] = DoctorDataState;
 
 
@@ -51,7 +49,7 @@ const Doctors = () => {
   const openAndCloseDoctorForm = (type) => {
 
     if (formData.name || formData.experience || formData.gender || formData.location || formData.specialization || formData.image) {
-      dispatch(Reset_Details());
+      dispatch(Reset_Details({ type: 'doctors' }));
     }
 
     dispatch(Form_Open_And_Close(type));
@@ -73,8 +71,9 @@ const Doctors = () => {
     }
 
     type === 'add_form' ? doctor_Data.push(formData) : doctor_Data.splice(deleteIndex, 1, formData);
+    setImageSrc(null);
     dispatch(Alert_Close());
-    dispatch(Reset_Details());
+    dispatch(Reset_Details({ type: 'doctors' }));
     dispatch(Form_Open_And_Close(type));
   }
 
@@ -94,14 +93,15 @@ const Doctors = () => {
         reader.readAsDataURL(file);
 
         reader.onload = () => {
-          dispatch(Set_Details({ [name]: reader.result }));
+          setImageSrc(reader.result);
+          dispatch(Set_Details({ [name]: reader.result, type: 'doctors' }));
           dispatch(Alert_Close());
         };
         return;
       }
     }
 
-    dispatch(Set_Details({ [name]: value }));
+    dispatch(Set_Details({ [name]: value, type: 'doctors' }));
   };
 
 
@@ -151,7 +151,7 @@ const Doctors = () => {
             <div className={styles.Container}>
               {
                 doctor_Data.map((doctor, index) => (
-                  <Doctor_Card key={index} doctor={doctor} index={index} />
+                  <Doctor_Card key={index+1} doctor={doctor} index={index} />
                 ))
               }
             </div>
@@ -207,7 +207,7 @@ const Doctors = () => {
                   <section className={styles.imageUpload}>
                     <div className={styles.imageUploadContainer}>
                       <label htmlFor='image' className={styles.imageUploadLabel}>
-                        <GrDocumentUpdate style={{ width: '100%', height: '100%' }} />
+                        {formData.image ? <img src={formData.image} alt='image' style={{ width: '100%', height: '100%' }} /> : <GrDocumentUpdate style={{ width: '100%', height: '100%' }} />}
                         <span>Upload Image</span>
                       </label>
                       <input
@@ -325,7 +325,7 @@ const Doctors = () => {
                   <section className={styles.imageUpload}>
                     <div className={styles.imageUploadContainer}>
                       <label htmlFor='image' className={styles.imageUploadLabel}>
-                        <GrDocumentUpdate style={{ width: '100%', height: '100%' }} />
+                        {formData.image ? <img src={formData.image} alt='image' style={{ width: '100%', height: '100%' }} /> : <GrDocumentUpdate style={{ width: '100%', height: '100%' }} />}
                         <span>Upload Image</span>
                       </label>
                       <input

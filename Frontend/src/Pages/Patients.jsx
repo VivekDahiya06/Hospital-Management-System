@@ -25,23 +25,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Alert_Close, Alert_Open } from '../Redux/Features/AlertSlice';
 import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
 import { Delete_Alert_Close } from '../Redux/Features/Delete_Slice';
+import { Reset_Details, Set_Details } from '../Redux/Features/Add_Slice';
+import { Edit_Alert_Close, Edit_Alert_Open } from '../Redux/Features/Edit_Slice';
 
 const Patients = () => {
 
   const dispatch = useDispatch();
   const formOpen = useSelector((state) => state.form_open.add_open);
+  const editFormOpen = useSelector((state) => state.form_open.edit_open);
   const alertOpen = useSelector((state) => state.alert.open);
   const alertMessage = useSelector((state) => state.alert.message);
   const deleteAlert = useSelector((state) => state.delete.alert_open);
+  const editAlert = useSelector((state) => state.edit.alert_open);
   const deleteIndex = useSelector((state) => state.delete.index);
+  const formData = useSelector((state) => state.add.add_patient_form_data);
 
 
   const MotionButton = motion.create(Button);
-  const { GlobalData: { PatientFormState, Patient_Data, PatientDataState, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
+  const { GlobalData: { Patient_Data, PatientDataState, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
 
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 520);
-  const [formData, setFormData] = PatientFormState;
   const [patient_Data, setPatient_Data] = PatientDataState;
 
 
@@ -53,36 +57,31 @@ const Patients = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  
+
 
 
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [name]: value
-      }
-    });
+    dispatch(Set_Details({ [name]: value, type: 'patients' }));
   }
 
 
 
-  // Function to add a new card
-  const addCard = () => {
+  // Function to Open & Close Patient Forms
+  const openAndClosePatientForm = (type) => {
     if (formData.name || formData.age || formData.gender || formData.address || formData.symptoms.length) {
-      setFormData(Patients)
+      dispatch(Reset_Details({ type: 'patients' }));
     }
-    dispatch(Form_Open_And_Close('add_form'));
+    dispatch(Form_Open_And_Close(type));
   }
 
 
 
 
   // Function to handle form submission
-  const formHandler = (e) => {
+  const update_formHandler = (e, type) => {
     e.preventDefault();
     if (!formData.name || !formData.age || !formData.gender || !formData.address || !formData.symptoms.length) {
       dispatch(Alert_Open("Please Fill All The Fields"));
@@ -95,10 +94,22 @@ const Patients = () => {
     }
 
     console.log(formData);
-    patient_Data.push(formData);
+    type ==='add_form' ? patient_Data.push(formData) : patient_Data.splice(deleteIndex, 1, formData);
     dispatch(Alert_Close())
-    setFormData(Patients)
-    dispatch(Form_Open_And_Close('add_form'));
+    dispatch(Reset_Details({ type: 'patients' }));
+    dispatch(Form_Open_And_Close(type));
+  };
+
+
+  const handleAlert = (e) => {
+    if (deleteAlert) {
+      patient_Data.splice(deleteIndex, 1);
+      dispatch(Delete_Alert_Close());
+    }
+    else {
+      update_formHandler(e, 'edit_form');
+      dispatch(Edit_Alert_Close());
+    }
   }
 
 
@@ -132,7 +143,7 @@ const Patients = () => {
                   width: "70%",
                 }
               }}
-              onClick={addCard}
+              onClick={() => openAndClosePatientForm('add_form')}
             >
               Add
             </MotionButton>
@@ -152,7 +163,7 @@ const Patients = () => {
             {/* Desktop Add Button */}
             {
               !isMobile &&
-              <div className={styles.add} onClick={addCard}>
+              <div className={styles.add} onClick={() => openAndClosePatientForm('add_form')}>
                 +
               </div>
             }
@@ -161,7 +172,7 @@ const Patients = () => {
             {/* Mobile Add Button */}
             {
               isMobile &&
-              <div className={styles.addButton} onClick={addCard}>
+              <div className={styles.addButton} onClick={() => openAndClosePatientForm('add_form')}>
                 <Button
                   variant="contained"
                   fullWidth={true}
@@ -169,7 +180,6 @@ const Patients = () => {
                     height: '2.7em',
                     fontSize: 'inherit'
                   }}
-                  onClick={addCard}
                 >
                   Add
                 </Button>
@@ -180,14 +190,14 @@ const Patients = () => {
       }
 
 
-      {/* Backdrop Modal for adding new card */}
+      {/* Backdrop Modal for add new card form */}
       <AnimatePresence>
         {
           formOpen && (
-            <BackdropModal modalHandler={addCard}>
+            <BackdropModal modalHandler={() => openAndClosePatientForm('add_form')}>
 
               {/* Form */}
-              <form className={styles.form} onSubmit={formHandler}>
+              <form className={styles.form} onSubmit={(e) => update_formHandler(e, 'add_form')}>
                 <h1>Add Patient</h1>
                 <TextField className={styles.input} label="Name" name='name' color='primary' onChange={handleInputChange} />
                 <TextField className={styles.input} label="Age" name='age' color='primary' onChange={handleInputChange} />
@@ -220,7 +230,8 @@ const Patients = () => {
                     },
                   }}
                   onChange={(e, newValue) => {
-                    setFormData({ ...formData, symptoms: newValue });
+                    dispatch(Set_Details({ symptoms: newValue, type: 'patients' }));
+                    // setFormData({ ...formData, symptoms: newValue });
                   }}
                   renderInput={(params) => {
                     return (
@@ -266,7 +277,7 @@ const Patients = () => {
       {/* Delete Backdrop opened on click of Delete Button */}
 
       <Dialog
-        open={deleteAlert}
+        open={deleteAlert || editAlert}
       >
         <DialogTitle
           sx={{
@@ -286,16 +297,15 @@ const Patients = () => {
           <Button
             variant="contained"
             color="error"
-            onClick={() => {
-              patient_Data.splice(deleteIndex, 1);
-              dispatch(Delete_Alert_Close());
-            }}>
+            onClick={handleAlert}>
             Yes
           </Button>
           <Button
             variant="contained"
             color="success"
-            onClick={() => { dispatch(Delete_Alert_Close()); }}>
+            onClick={() => {
+              deleteAlert ? dispatch(Delete_Alert_Close()) : dispatch(Edit_Alert_Close());
+            }}>
             No
           </Button>
         </DialogContent>
@@ -303,6 +313,77 @@ const Patients = () => {
 
 
       {/* Edit Backdrop form opened on click of Edit Button */}
+
+      <AnimatePresence>
+        {
+          editFormOpen && (
+            <BackdropModal modalHandler={() => openAndClosePatientForm('edit_form')}>
+
+              {/* Form */}
+              <form className={styles.form}>
+                <h1>Edit Patient</h1>
+                <TextField className={styles.input} label="Name" name='name' color='primary' value={formData.name} onChange={handleInputChange} />
+                <TextField className={styles.input} label="Age" name='age' color='primary' value={formData.age} onChange={handleInputChange} />
+                <div className={styles.radioContainer}>
+                  <FormLabel>Gender</FormLabel>
+                  <RadioGroup row name='gender' value={formData.gender} onChange={handleInputChange} sx={{ '@media (max-width: 520px)': { flexDirection: 'column' } }}>
+                    <FormControlLabel label="Male" value='male' control={<Radio />} />
+                    <FormControlLabel label="Female" value='female' control={<Radio />} />
+                  </RadioGroup>
+                </div>
+                <TextField className={styles.input} label="Address" name='address' color='primary' value={formData.address} onChange={handleInputChange} />
+                <Autocomplete
+                  className={styles.input}
+                  multiple
+                  freeSolo
+                  selectOnFocus
+                  name='symptoms'
+                  value={formData.symptoms}
+                  limitTags={2}
+                  options={symptomsOptions}
+                  sx={{
+                    '& .MuiChip-sizeMedium': {
+                      backgroundColor: '#0c306f',  // Change background color of selected items
+                      color: 'white',                // Change text color of selected items
+                    },
+                    '& .MuiChip-deleteIcon': {
+                      color: '#fafafa',
+                      '&:hover': {
+                        color: '#8c8c8c'
+                      }
+                    },
+                  }}
+                  onChange={(e, newValue) => {
+                    dispatch(Set_Details({ symptoms: newValue, type: 'patients' }));
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField {...params} label="Symptoms" />
+                    )
+                  }}
+                />
+                <MotionButton
+                  className={styles.submitButton}
+                  whileHover={{ scale: 1.08 }}
+                  sx={{
+                    '@media (max-width: 520px)': {
+                      margin: "0.8em 0",
+                    },
+                  }}
+                  variant='outlined'
+                  type='submit'
+                  onClick={() => {
+                    dispatch(Edit_Alert_Open());
+                  }}
+                >
+                  Edit
+                </MotionButton>
+              </form>
+
+            </BackdropModal>
+          )
+        }
+      </AnimatePresence>
 
     </>
   );

@@ -53,10 +53,10 @@ const Data = [
 
 export const Doctors_Data = [
     // { "name": "Alvira Chamberlain", "experience": 11, "gender": "Female","specialization": "Dermatologist","location": "0544 Bartelt Avenue","image": `${image1}` },
-    { "name": "Mal O'Dyvoy", "experience": 20, "gender": "Male","specialization": "Surgeon","location": "0442 Dovetail Junction","image": `${image2}` },
-    { "name": "Barrie Savile", "experience": 15, "gender": "Male","specialization": "Dentist","location": "6 Ilene Road","image": `${image3}` },
-    { "name": "Glenden Jursch", "experience": 17, "gender": "Female","specialization": "Oncologist","location": "5079 Scofield Court","image": `${image4}` },
-    { "name": "Ilaire Frunks", "experience": 12, "gender": "Female","specialization": "Pediatrician","location": "93014 Lerdahl Parkway","image": `${image5}` },
+    { "name": "Mal O'Dyvoy", "experience": 20, "gender": "male","specialization": "Surgeon","location": "0442 Dovetail Junction","image": `${image2}` },
+    { "name": "Barrie Savile", "experience": 15, "gender": "male","specialization": "Dentist","location": "6 Ilene Road","image": `${image3}` },
+    { "name": "Glenden Jursch", "experience": 17, "gender": "female","specialization": "Oncologist","location": "5079 Scofield Court","image": `${image4}` },
+    { "name": "Ilaire Frunks", "experience": 12, "gender": "female","specialization": "Pediatrician","location": "93014 Lerdahl Parkway","image": `${image5}` },
     // { "name": "Fianna Negal", "experience": 10, "gender": "Female","specialization": "Psychiatrist","location": "3067 Rockefeller Road","image": `` },
     // { "name": "Corette Caulkett", "experience": 13, "gender": "Female","specialization": "Ophthalmologist","location": "042 Brickson Park Junction","image": "" },
     // { "name": "Blinni Tarver", "experience": 28, "gender": "Female","specialization": "Gynecologist","location": "8 Mayer Trail","image": "" },

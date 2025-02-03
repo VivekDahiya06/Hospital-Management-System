@@ -5,6 +5,8 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from 'react-redux';
 import { Delete_Alert_Open, Delete_Index } from '../Redux/Features/Delete_Slice';
+import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
+import { Set_Details } from '../Redux/Features/Add_Slice';
 
 
 const Patient_ModelCards = ({ patient, index }) => {
@@ -17,7 +19,9 @@ const Patient_ModelCards = ({ patient, index }) => {
 
     // Function to edit the details of the patient
     const handleEdit = () => {
-        console.log("Edit");
+        dispatch(Form_Open_And_Close('edit_form'));
+        dispatch(Set_Details({ ...patient, type: 'patients' }));
+        dispatch(Delete_Index(index));
     }
 
 

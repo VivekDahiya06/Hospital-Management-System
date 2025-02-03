@@ -20,7 +20,7 @@ const Doctor_Card = ({ index, doctor }) => {
     // Function to edit the details of the doctor
     const handleEdit = () => {
         dispatch(Form_Open_And_Close('edit_form'))
-        dispatch(Set_Details(doctor));
+        dispatch(Set_Details({...doctor, type: 'doctors'}));
         dispatch(Delete_Index(index))
     }
     
