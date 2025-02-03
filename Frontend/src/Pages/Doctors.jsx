@@ -27,13 +27,13 @@ const Doctors = () => {
   const deleteIndex = useSelector((state) => state.delete.index);
   const formData = useSelector((state) => state.add.add_doctor_form_data);
 
-  const [imageSrc, setImageSrc] = useState(null);
-
 
   const { GlobalData: { Doctors_Data, DoctorDataState } } = useContext(AppContext);
 
+
   const MotionButton = motion.create(Button);
 
+  
   // state replicating data coming from API
   const [doctor_Data, setDoctor_Data] = DoctorDataState;
 
@@ -71,7 +71,6 @@ const Doctors = () => {
     }
 
     type === 'add_form' ? doctor_Data.push(formData) : doctor_Data.splice(deleteIndex, 1, formData);
-    setImageSrc(null);
     dispatch(Alert_Close());
     dispatch(Reset_Details({ type: 'doctors' }));
     dispatch(Form_Open_And_Close(type));
@@ -93,7 +92,6 @@ const Doctors = () => {
         reader.readAsDataURL(file);
 
         reader.onload = () => {
-          setImageSrc(reader.result);
           dispatch(Set_Details({ [name]: reader.result, type: 'doctors' }));
           dispatch(Alert_Close());
         };

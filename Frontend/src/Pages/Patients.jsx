@@ -4,20 +4,7 @@ import Patient_Card from '../components/Patient_Card';
 import Patient_ModelCards from '../components/Patient_ModelCards';
 import { AppContext } from '../Store/Context';
 import No_Patients_Found from '../assets/Images/No_Patients_Found.png';
-import {
-  Alert,
-  Autocomplete,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Snackbar,
-  TextField
-} from '@mui/material';
+import { Alert, Autocomplete, Button, Dialog, DialogContent, DialogTitle, FormControlLabel, FormLabel, Radio, RadioGroup, Snackbar, TextField } from '@mui/material';
 import { AnimatePresence, motion } from 'motion/react';
 import BackdropModal from '../components/BackdropModal';
 import Header from '../components/Header';
@@ -42,7 +29,7 @@ const Patients = () => {
 
 
   const MotionButton = motion.create(Button);
-  const { GlobalData: { Patient_Data, PatientDataState, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
+  const { GlobalData: { Patient_Data, PatientDataState, symptomsOptions } } = useContext(AppContext);
 
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 520);
@@ -94,7 +81,7 @@ const Patients = () => {
     }
 
     console.log(formData);
-    type ==='add_form' ? patient_Data.push(formData) : patient_Data.splice(deleteIndex, 1, formData);
+    type === 'add_form' ? patient_Data.push(formData) : patient_Data.splice(deleteIndex, 1, formData);
     dispatch(Alert_Close())
     dispatch(Reset_Details({ type: 'patients' }));
     dispatch(Form_Open_And_Close(type));
@@ -231,7 +218,6 @@ const Patients = () => {
                   }}
                   onChange={(e, newValue) => {
                     dispatch(Set_Details({ symptoms: newValue, type: 'patients' }));
-                    // setFormData({ ...formData, symptoms: newValue });
                   }}
                   renderInput={(params) => {
                     return (
