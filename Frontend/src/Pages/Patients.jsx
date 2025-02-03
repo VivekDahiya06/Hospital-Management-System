@@ -21,34 +21,39 @@ import {
 import { AnimatePresence, motion } from 'motion/react';
 import BackdropModal from '../components/BackdropModal';
 import Header from '../components/Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { Alert_Close, Alert_Open } from '../Redux/Features/AlertSlice';
+import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
+import { Delete_Alert_Close } from '../Redux/Features/Delete_Slice';
 
 const Patients = () => {
 
+  const dispatch = useDispatch();
+  const formOpen = useSelector((state) => state.form_open.add_open);
+  const alertOpen = useSelector((state) => state.alert.open);
+  const alertMessage = useSelector((state) => state.alert.message);
+  const deleteAlert = useSelector((state) => state.delete.alert_open);
+  const deleteIndex = useSelector((state) => state.delete.index);
+
+
   const MotionButton = motion.create(Button);
-  const { GlobalData: { FormState, AlertState, DeleteAlertState, AlertMessageState, PatientFormState, Patient_Data, PatientDataState, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
+  const { GlobalData: { PatientFormState, Patient_Data, PatientDataState, symptomsOptions, initialState: { Patients } } } = useContext(AppContext);
 
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 520);
-  const [formOpen, setFormOpen] = FormState;
-  const [alertOpen, setAlertOpen] = AlertState;
-  const [alertMessage, setAlertMessage] = AlertMessageState;
   const [formData, setFormData] = PatientFormState;
-  const [deleteAlert, setDeleteAlert] = DeleteAlertState;
-  const [deleteIndex, setDeleteIndex] = useState(null);
   const [patient_Data, setPatient_Data] = PatientDataState;
 
 
 
   // Update 'isMobile' state on window resize
   useEffect(() => {
+    setPatient_Data([...Patient_Data]);
     const handleResize = () => setIsMobile(window.innerWidth <= 520);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  useEffect(() => {
-    setPatient_Data(Patient_Data);
-  }, [])
+  
 
 
 
@@ -67,10 +72,10 @@ const Patients = () => {
 
   // Function to add a new card
   const addCard = () => {
-    if (formData.name !== '' || formData.age !== '' || formData.gender !== '' || formData.address !== '' || formData.symptoms.length !== 0) {
+    if (formData.name || formData.age || formData.gender || formData.address || formData.symptoms.length) {
       setFormData(Patients)
     }
-    setFormOpen(!formOpen);
+    dispatch(Form_Open_And_Close('add_form'));
   }
 
 
@@ -79,24 +84,21 @@ const Patients = () => {
   // Function to handle form submission
   const formHandler = (e) => {
     e.preventDefault();
-    if (formData.name === '' || formData.age === '' || formData.gender === '' || formData.address === '' || formData.symptoms.length === 0) {
-      setAlertOpen(true);
-      setAlertMessage("Please Fill All The Fields");
+    if (!formData.name || !formData.age || !formData.gender || !formData.address || !formData.symptoms.length) {
+      dispatch(Alert_Open("Please Fill All The Fields"));
       return;
     }
 
     else if (formData.symptoms.length < 3) {
-      setAlertOpen(true);
-      setAlertMessage("Please Select At Least 3 Symptoms");
+      dispatch(Alert_Open("Please Select At Least 3 Symptoms"));
       return;
     }
 
     console.log(formData);
-    Data.push(formData);
-    setAlertMessage('');
-    setAlertOpen(false);
-    setFormData(Patients) //Setting up to initial State
-    setFormOpen(false);
+    patient_Data.push(formData);
+    dispatch(Alert_Close())
+    setFormData(Patients)
+    dispatch(Form_Open_And_Close('add_form'));
   }
 
 
@@ -137,12 +139,13 @@ const Patients = () => {
           </div>
         ) : (
           <div className={styles.homeContainer}>
+
             {/* Patient Cards */}
             {
               patient_Data.map((patient, index) => (
                 isMobile
-                  ? <Patient_ModelCards key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
-                  : <Patient_Card key={patient.id || index} patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
+                  ? <Patient_ModelCards key={patient.id || index} patient={patient} index={index} />
+                  : <Patient_Card key={patient.id || index} patient={patient} index={index} />
               ))
             }
 
@@ -250,10 +253,9 @@ const Patients = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={alertOpen}
         autoHideDuration={2000}
-        onClose={() => setAlertOpen(false)}
+        onClose={() => dispatch(Alert_Close())}
       >
         <Alert
-          onClose={() => setAlertOpen(false)}
           severity="error"
           variant='filled'
         >
@@ -286,14 +288,14 @@ const Patients = () => {
             color="error"
             onClick={() => {
               patient_Data.splice(deleteIndex, 1);
-              setDeleteAlert(false);
+              dispatch(Delete_Alert_Close());
             }}>
             Yes
           </Button>
           <Button
             variant="contained"
             color="success"
-            onClick={() => { setDeleteAlert(false) }}>
+            onClick={() => { dispatch(Delete_Alert_Close()); }}>
             No
           </Button>
         </DialogContent>

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const Doctors_Delete_Slice = createSlice({
+const Delete_Slice = createSlice({
     initialState: {
         alert_open: false,
         index: null
     },
-    name: 'Doctors_delete',
+    name: 'delete',
     reducers: {
         Delete_Alert_Open: (state) => {
             state.alert_open = true
@@ -20,6 +20,6 @@ const Doctors_Delete_Slice = createSlice({
     }
 });
 
-export const { Delete_Alert_Open, Delete_Alert_Close, Delete_Index } = Doctors_Delete_Slice.actions;
+export const { Delete_Alert_Open, Delete_Alert_Close, Delete_Index } = Delete_Slice.actions;
 
-export default Doctors_Delete_Slice;
+export default Delete_Slice;

@@ -11,7 +11,7 @@ import bandage from '../assets/Images/bandage.svg';
 import medic_Box from '../assets/Images/medicine-box.svg';
 
 
-const Patient_Card = ({ patient, index, setDeleteIndex }) => {
+const Patient_Card = ({ patient, index }) => {
     const [open, setOpen] = useState(false);
 
     // Function to open and close the model
@@ -43,7 +43,7 @@ const Patient_Card = ({ patient, index, setDeleteIndex }) => {
                 {
                     open &&
                     <BackdropModal modalHandler={handleClose}>
-                        <Patient_ModelCards patient={patient} index={index} setDeleteIndex={setDeleteIndex} />
+                        <Patient_ModelCards patient={patient} index={index} />
                     </BackdropModal>
                 }
             </AnimatePresence>

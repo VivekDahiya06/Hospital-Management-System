@@ -1,27 +1,32 @@
 import styles from './styles/Patient_ModelCards.module.css';
 import { Button, IconButton } from '@mui/material';
 import { motion } from 'motion/react';
-import { useContext } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { AppContext } from '../Store/Context';
+import { useDispatch } from 'react-redux';
+import { Delete_Alert_Open, Delete_Index } from '../Redux/Features/Delete_Slice';
 
 
-const Patient_ModelCards = ({ patient, index, setDeleteIndex }) => {
+const Patient_ModelCards = ({ patient, index }) => {
 
-    const {GlobalData:{DeleteAlertState}} = useContext(AppContext);
+    const dispatch = useDispatch();
 
     const MotionButton = motion.create(Button);
 
-    const [deleteAlert, setDeleteAlert] = DeleteAlertState;
 
+
+    // Function to edit the details of the patient
     const handleEdit = () => {
         console.log("Edit");
     }
+
+
+    // Function to delete the details of the patient
     const handleDelete = () => {
-        setDeleteAlert(true);
-        setDeleteIndex(index);
+        dispatch(Delete_Alert_Open());
+        dispatch(Delete_Index(index));
     }
+
 
     return (
         <>
