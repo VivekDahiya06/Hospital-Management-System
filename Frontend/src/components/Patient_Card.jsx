@@ -6,9 +6,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import Patient_ModelCards from './Patient_ModelCards';
 import BackdropModal from './BackdropModal';
 import { MdOutlineArrowDropDownCircle } from "react-icons/md";
-import scope from '../assets/Images/sthethoscope.svg';
-import bandage from '../assets/Images/bandage.svg';
-import medic_Box from '../assets/Images/medicine-box.svg';
+import scope from '../assets/Images/SVGs/sthethoscope.svg';
+import bandage from '../assets/Images/SVGs/bandage.svg';
+import medic_Box from '../assets/Images/SVGs/medicine-box.svg';
 
 
 const Patient_Card = ({ patient, index }) => {
