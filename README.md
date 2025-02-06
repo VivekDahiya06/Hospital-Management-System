@@ -1,4 +1,4 @@
-# 🏥Hospital Management System
+# Hospital Management System 🏥
 
 ## Project Overview
 This project is a user-friendly web application designed to streamline hospital operations by managing patient records, doctor schedules, and appointments efficiently.
