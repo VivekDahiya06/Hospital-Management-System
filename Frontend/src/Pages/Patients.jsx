@@ -14,6 +14,7 @@ import { Form_Open_And_Close } from '../Redux/Features/Form_Open_Slice';
 import { Delete_Alert_Close } from '../Redux/Features/Delete_Slice';
 import { Reset_Details, Set_Details } from '../Redux/Features/Add_Slice';
 import { Edit_Alert_Close, Edit_Alert_Open } from '../Redux/Features/Edit_Slice';
+import axios from 'axios';
 
 const Patients = () => {
 
@@ -39,13 +40,25 @@ const Patients = () => {
 
   // Update 'isMobile' state on window resize
   useEffect(() => {
+    fetchPatientData();
     setPatient_Data([...Patient_Data]);
     const handleResize = () => setIsMobile(window.innerWidth <= 520);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+ 
 
 
+
+  async function fetchPatientData() {
+    try {
+      const patient_Api_Request = await axios.get('http://localhost:5000/patients');
+      console.log(patient_Api_Request.data);
+    }
+    catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
 
   // Function to handle form input changes

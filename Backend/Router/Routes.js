@@ -5,14 +5,9 @@ const { patientsGet } = require('../Router/Controller/Patients.js');
 const { doctorsGet } = require('../Router/Controller/Doctors.js');
 
 
-
-
 //? Routes for Appointments
 //* Get Request
 router.route('/appointments').get(appointmentsGet);
-
-
-
 
 
 //? Routes for Doctors
@@ -20,14 +15,9 @@ router.route('/appointments').get(appointmentsGet);
 router.route('/doctors').get(doctorsGet);
 
 
-
-
-
 //? Routes for Patients
 //* Get Request
 router.route('/patients').get(patientsGet);
-
-
 
 
 module.exports = router;
