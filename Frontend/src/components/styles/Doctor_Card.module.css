@@ -53,11 +53,19 @@
         width: 80%;
         padding: 1em;
     }
+
+    .main{
+        justify-content: center;
+        align-items: center;
+    }
     .info{
+        order: 2;
         width: 100%;
     }
     .image{
-        display: none;
+        max-height: 50%;
+        order: 1;
+        /* display: none; */
     }
     .buttons{
         display: none;
