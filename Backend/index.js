@@ -1,30 +1,30 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const mongoose = require('mongoose');
-const router  = require('./Router/Routes.js');
+const router = require('./Router/Routes.js');
+const Database_Connection = require('./Database/DB.js');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-//? Database setup
-async function Database_Connection() {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log(`✅ Connected to Mongodb Database`);
-    }
-    catch (error) {
-        console.log(error)
-    }
-}
-Database_Connection();
+// Debugging
+console.log("🔗 Connecting to MongoDB...");
 
-
-//? Middleware setup
+// Middleware setup
 app.use(cors());
 app.use(express.json());
 
-//? Routes setup
-app.use(router);
+// Start server only after database connection
+(async () => {
+    try {
+        await Database_Connection();
+        // Routes setup
+        app.use("/api", router); // Mount routes under /api
 
-app.listen(PORT, () => console.log(`🚀 Server running on port: http://localhost:${PORT}`));
+        // Server setup
+        app.listen(PORT, () => console.log(`🚀 Server running on: http://localhost:${PORT}`));
+    } catch (error) {
+        console.error("❌ Failed to connect to MongoDB:", error);
+        process.exit(1); // Exit process if DB connection fails
+    }
+})();
