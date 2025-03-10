@@ -18,15 +18,15 @@ async function Database_Connection() {
     try {
         // Attach event listeners before connecting
         mongoose.connection.on("connected", () => {
-            console.log("✅ Connected to MongoDB Database");
+            console.log(`✅ Connected to MongoDB Database at => ${new Date().toLocaleTimeString()}`);
         });
 
         mongoose.connection.on("error", (err) => {
-            console.error("❌ MongoDB connection error:", err);
+            console.error(`❌ MongoDB connection error:`, err);
         });
 
         mongoose.connection.on("disconnected", () => {
-            console.log("⚠️ MongoDB disconnected!");
+            console.log(`⚠️ MongoDB disconnected! at: ${new Date().toLocaleTimeString()}`);
         });
 
         // Connect to MongoDB
