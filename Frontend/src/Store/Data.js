@@ -18,7 +18,7 @@ const Breakpoints = {
 }
 
 
-const Data = [
+const Patients_Data = [
     {
         "name": "Brennan Ramirez",
         "age": 77,
@@ -90,4 +90,4 @@ export const symptomsOptions = [
     'Loss of Appetite',
   ]
 
-export default Data;
+export default Patients_Data;
