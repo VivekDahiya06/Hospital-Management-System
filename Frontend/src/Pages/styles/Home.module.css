@@ -5,6 +5,16 @@
     --color-four: #3c3c3c;
 }
 
+.heading{
+    height: 20vh;
+    /* padding: 0em; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    color: var(--color-one);
+}
+
 .homeContainer {
     height: 100%;
     display: flex;
@@ -15,8 +25,7 @@
 }
 
 .card {
-    min-width: 20em;
-    height: 20%;
+    padding: 4em;
     border: 2px solid black;
     border-radius: 12px;
     align-content: center;
@@ -30,7 +39,9 @@
 
 
 @media screen and (width <=768px) {
+    
     .homeContainer {
+        font-size: 0.6rem;
         flex-direction: column;
     }
 }
